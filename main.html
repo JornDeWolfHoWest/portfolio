@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Developer Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #0b1020;
+      color: #f5f7ff;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
+    }
+
+    .glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(111,76,255,0.25), transparent 70%);
+      top: -100px;
+      right: -100px;
+      z-index: -1;
+      filter: blur(40px);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 8%;
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(12px);
+      background: rgba(11,16,32,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #d8defd;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #8c7bff;
+    }
+
+    section {
+      padding: 6rem 8%;
+    }
+
+    .cta {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.9rem 1.4rem;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: 0.3s;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #7c5cff, #45d0ff);
+      color: white;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .screen {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 1rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    .pixel-window {
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #1a2040, #10162d);
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      margin-bottom: 2rem;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      flex-direction: row;
+      align-items: flex-start;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(124,92,255,0.6);
+    }
+
+    .card h3 {
+      margin-bottom: 0.8rem;
+    }
+
+    .card p {
+      color: #b8c0e0;
+      line-height: 1.7;
+    }
+
+    .card-content {
+      flex: 1;
+      margin-right: 1rem;
+    }
+
+    .project-video {
+      width: 100%;
+      max-width: 240px;
+      aspect-ratio: 16 / 9;
+      margin-top: 1rem;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .project-video iframe {
+      width: 100%;
+      max-height: 240px;
+      height: 100%;
+      border: none;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 240px;
+      margin-top: 1rem;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      transform: translateX(0);
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-track img {
+      width: 100%;
+      flex: 1 0 100%;
+      object-fit: cover;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(124,92,255,0.4);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 3.5rem;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #7c5cff;
+      box-shadow: 0 0 20px rgba(124,92,255,0.8);
+    }
+
+    .timeline-item h3 {
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-item span {
+      color: #8c95bb;
+      font-size: 0.95rem;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .tag {
+      padding: 0.6rem 1rem;
+      border-radius: 999px;
+      background: rgba(124,92,255,0.15);
+      border: 1px solid rgba(124,92,255,0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #9aa4d3;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .carousel button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      z-index: 2;
+      border-radius: 8px;
+    }
+
+    .carousel button:hover {
+      background: rgba(124,92,255,0.6);
+    }
+
+    .carousel .prev {
+      left: 5px;
+    }
+
+    .carousel .next {
+      right: 5px;
+    }
+
+    .project-video,
+      .carousel {
+        max-width: 100%;
+        justify-content: center;
+      }
+    @media (max-width: 900px) {
+      .card {
+        flex-direction: column;
+      }
+
+      .card-content {
+        margin-right: 0;
+      }
+
+      
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .cta {
+        justify-content: center;
+      }
+
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="glow"></div>
+
+  <header>
+    <div class="logo">Jorn De Wolf</div>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="projects">
+    <h2 class="section-title">My Projects</h2>
+    <div class="projects-grid">
+      <div class="card">
+        <a style="color: blue;" href="https://eliasclaeys.itch.io/ragdoll-sockers" target="_blank">Click here to go to the itch page!</a>
+        <br>
+        <br>
+        <div class="card-content">
+          
+          <h3>Ragdoll sockers</h3>
+          <p>A game made by Jeronimas Boots, Tagni Geudens, Elias Claeys and myself for the xbox game camp game jam. Which allowed us to work on this project and experience the short development time that we were given of just a few days.</p>
+          <br>
+          <p>I worked on:<br>
+            - The player movement<br>
+            - Bomb throwing and explosion mechanics<br>
+            - Destructable terrain<br>
+            - Audience jumping<br>
+            - Scoreboard system<br>
+            - The intro screen<br>
+            - I made the trailer video for the game</p>
+        </div>
+        <div class="project-video">
+          <a style="color: blue;" href="https://youtu.be/DM8LIWro9Ds" target="_blank">Click here for trailer or watch the video!</a>
+          <iframe src="https://youtube.com/embed/DM8LIWro9Ds" allowfullscreen></iframe>
+        </div>
+        <br>
+        <br>
+        <p>Check out the images below aswell!</p>
+        <div class="carousel">
+          <button class="prev" onclick="moveCarousel(this,-1)">‹</button>
+          <div class="carousel-track">
+            <img src="RagdollSoccersGameplay1.png" alt="Ragdoll Soccers Gameplay 1">
+            <img src="RagdollSoccersGameplay2.png" alt="Ragdoll Soccers Gameplay 2">
+            <img src="RagdollSoccersGameplay3.png" alt="Ragdoll Soccers Gameplay 3">
+            <img src="RagdollSoccersGameplay4.png" alt="Ragdoll Soccers Gameplay 4">
+          </div>
+          <button class="next" onclick="moveCarousel(this,1)">›</button>
+        </div>
+      </div>
+
+
+
+
+      <div class="card">
+        <a style="color: blue;" href="https://maksel636new.itch.io/gp21hamstermayham">Click here to go to the itch page!</a>
+        <br>
+        <br>
+        
+        <div class="card-content">
+          <h3>MayHamster</h3>
+          <h5>Currently in development! More to come!</h5>
+          <p>4 player game where three players control a hamster and one player controls a human. The goal for the hamsters is to kill themselves in any way nessecary. The human must prevent hamsters from dying!</p>
+          <br>
+          <p>I worked on:<br>
+            - The player movement<br>
+            - Round system<br>
+            - The camera system that switches the cameras for the players, so you keep looking at one spot while you switch to a human or hamster<br>
+            - Worked on the window death mechanic<br>
+            - Body system<br>
+            - Points system.<br>
+            - UI implementation<br>
+            - Notification system to let the human know what is turned on/off
+          </p>
+        </div>
+        <div class="carousel">
+          <button class="prev" onclick="moveCarousel(this,-1)">‹</button>
+          <div class="carousel-track">
+            <img src="MainLogoMayHamster.png" alt="MayHamsterLogo">
+            <img src="MayHamsterGameplayImage1.png" alt="mayhamster gameplay 1">
+            <img src="MayHamsterGameplayImage2.png" alt="mayhamster gameplay 2">
+          </div>
+          <button class="next" onclick="moveCarousel(this,1)">›</button>
+        </div>
+      </div>
+
+
+
+      <div class="card">
+        <a style="color: blue;" href="https://github.com/LucyShortForLucas/NESSAN">Click here to go to the github page!</a>
+        <br>
+        <br>
+        
+        <div class="card-content">
+          <h3>CoinHeist</h3>
+          <h5>Game for the NES (Nintendo Entertainment System)</h5>
+          <br>
+          <p>A game where your goal is to get 10 coins before the other player! You can sabotage them using a gun, bombs or use a ghost ability to pass through objets!</p>
+          <br>
+          <p>I worked on:<br>
+            - The player movement<br>
+            - Coin and item collection system<br>
+            - Collision detection and implementation<br>
+            - Bomb throwing & exploding<br>
+            - Ghost ability<br>
+          </p>
+        </div>
+        <div class="carousel">
+          <button class="prev" onclick="moveCarousel(this,-1)">‹</button>
+          <div class="carousel-track">
+            <img src="CoinHeist.png" alt="CoinHeist Title Image">
+            <img src="CoinHeist_Art.png" alt="CoinHeist Art Image">
+            <img src="CoinHeistGameplayImage.png" alt="CoinHeist Gameplay Image">
+          </div>
+          <button class="next" onclick="moveCarousel(this,1)">›</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <h2 class="section-title">My timeline</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <h3>Started Learning Programming</h3>
+        <span>2015</span>
+        <p>Began to study at CodeFever learning programming using scratch.</p>
+        <p>Learned HTML, CSS, JS, Python and basics of ethical hacking from CodeFever</p>
+      </div>
+      <div class="timeline-item">
+        <h3>Became a Teacher Assistant for Codefever summercamp and in the weekends</h3>
+        <span>2021</span>
+        <p>Started assisting other students aged 8-15 in learning scratch and minecraft education edition (scratch 3d)</p>
+      </div>
+      <div class="timeline-item">
+        <h3>Started Game Development at Digital Arts & Entertainment</h3>
+        <span>2023</span>
+        <p>Began my journey of learning C++ for game development, in Kortrijk</p>
+      </div>
+      <div class="timeline-item">
+        <h3>Became a teacher for Codefever</h3>
+        <span>2026</span>
+        <p>After many years of working as an assistant, I applied to become a teacher. And started teaching students the basics of programming just like I did back in 2015</p>
+        <p>Learned class management skills and talking with parents.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2 class="section-title">Skills & Tools</h2>
+    <div class="skills">
+      <span class="tag">6502 Assembly</span>
+      <span class="tag">C++</span>
+      <span class="tag">C#</span>
+      <span class="tag">Unity</span>
+      <span class="tag">Unreal</span>
+      <span class="tag">Python</span>
+      <span class="tag">OOP</span>
+      <span class="tag">HTML</span>
+      <span class="tag">Concurrency</span>
+      <span class="tag">Class management</span>
+      <span class="tag">Communication; between group-members and parents</span>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2 class="section-title">Contact</h2>
+    <p>Email: <a style="color: blue;" href="mailto:jorn@aliso.be">jorn@aliso.be</a></p>
+    <p>School Email: <a style="color: blue;" href="mailto:jorn.de.wolf@student.howest.be">jorn.de.wolf@student.howest.be</a></p>
+    <p>Github:  <a style="color: blue;" href="https://github.com/JornDeWolfHoWest">JornDeWolfHoWest</a></p>
+    <p>LinkedIn: <a style="color: blue;" href="https://www.linkedin.com/in/jorn-de-wolf/">Jorn De Wolf</a></p>
+  </section>
+
+  <footer>
+  </footer>
+
+  <script>
+    function moveCarousel(btn, dir) {
+      const carousel = btn.parentElement;
+      const track = carousel.querySelector('.carousel-track');
+      const items = track.children.length;
+      let index = carousel.dataset.index ? parseInt(carousel.dataset.index) : 0;
+
+      index += dir;
+      if (index < 0) index = items - 1;
+      if (index >= items) index = 0;
+
+      carousel.dataset.index = index;
+      track.style.transform = `translateX(${-index * 100}%)`;
+    }
+  </script>
+</body>
+</html>
